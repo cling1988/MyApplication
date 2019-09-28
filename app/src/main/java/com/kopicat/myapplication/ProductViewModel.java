@@ -18,7 +18,7 @@ public class ProductViewModel extends ViewModel {
 
     private MutableLiveData<Product> product;
 
-    public LiveData<List<Product>> getProductList() {
+    public MutableLiveData<List<Product>> getProductList() {
         if(null==productList){
             Log.i("Init","Init list.....");
             productList = new MutableLiveData<>();
