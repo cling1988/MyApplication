@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.kopicat.myapplication.entity.Product;
 
@@ -57,15 +58,27 @@ public class ItemFragment extends Fragment {
         Context context = view.getContext();
         recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        adapter = new MyItemRecyclerViewAdapter(viewModel.getProductList().getValue(), mListener);
 
+
+        recyclerView.setAdapter(adapter);
         Observer<List<Product>> productListObserver = new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
-                adapter = new MyItemRecyclerViewAdapter(products, mListener);
-                recyclerView.setAdapter(adapter);
+//                adapter = new MyItemRecyclerViewAdapter(products, mListener);
+//
+//
+//                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                Log.i("Inside Fragment","Reload the list "+adapter.hasObservers());
+
+                Toast.makeText(getContext(),"Update the list",Toast.LENGTH_LONG);
             }
         };
         viewModel.getProductList().observe(this,productListObserver);
+
+//        adapter = new MyItemRecyclerViewAdapter(viewModel.getProductList2(), mListener);
+//        recyclerView.setAdapter(adapter);
         return view;
     }
 

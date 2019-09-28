@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
+        viewModel.initList();
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -64,11 +66,17 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         Log.i("PrintOBJ",viewModel.getProduct().getValue().toString());
         viewModel.getProduct().getValue().setOpening(open);
         viewModel.getProduct().getValue().setBalance(balance);
-        Log.i("FragmentAlertDialog", viewModel.getProduct().getValue().toString());
 //        viewModel.getProductList().
 //        viewModel.getProductList().getValue().set(viewModel.getProduct().getValue().id-1,viewModel.getProduct().getValue());
         viewModel.updateProductList(viewModel.getProduct().getValue());
-        Log.i("FragmentAlertDialog", "Positive click!"+open);
+        Log.i("FragmentAlertDialog", viewModel.getProduct().getValue().toString());
+
+
+//        NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+//        ItemFragment itemFragment = (ItemFragment)navHostFragment.getChildFragmentManager().getFragments().get(0);
+//        itemFragment.refreshView();
+
+
     }
 
 }
