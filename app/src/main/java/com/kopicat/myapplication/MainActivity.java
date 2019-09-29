@@ -1,6 +1,7 @@
 package com.kopicat.myapplication;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,14 +10,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kopicat.myapplication.entity.Product;
+import com.kopicat.myapplication.entity.ProductViewModel;
+import com.kopicat.myapplication.ui.edit.EditItemDialog;
+import com.kopicat.myapplication.ui.edit.EditItemsFragment;
+import com.kopicat.myapplication.ui.table.TableItemsFragment;
 
-public class MainActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements EditItemsFragment.OnListFragmentInteractionListener, TableItemsFragment.OnFragmentInteractionListener {
 
     private ProductViewModel viewModel;
     @Override
@@ -24,12 +28,18 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
         viewModel.initList();
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+
+            StrictMode.setThreadPolicy(policy);
+        }
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                R.id.navigation_home, R.id.navigation_edit, R.id.navigation_result)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -38,9 +48,9 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
     @Override
     public void onAttachFragment(Fragment fragment) {
-        if(fragment instanceof ItemFragment){
-            ItemFragment itemFragment = (ItemFragment)fragment;
-            itemFragment.setListFragmentInteractionListener(this);
+        if(fragment instanceof EditItemsFragment){
+            EditItemsFragment editItemsFragment = (EditItemsFragment)fragment;
+            editItemsFragment.setListFragmentInteractionListener(this);
             Log.i("MAIN ACTIVITY","Load fragment to listener");
         }
 
@@ -48,35 +58,22 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
     @Override
     public void onListFragmentInteraction(Product item) {
-        viewModel.setProduct(item);
+        viewModel.setSelectedProduct(item);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag("edit_product_dialog");
         if (prev != null) {
             ft.remove(prev);
         }
         ft.addToBackStack(null);
-        EditProductDialog newFragment = new EditProductDialog();
+        EditItemDialog newFragment = new EditItemDialog();
         newFragment.show(ft, "edit_product_dialog");
 
 
 
     }
 
-    public void doPositiveClick(double open,double balance) {
-        Log.i("PrintOBJ",viewModel.getProduct().getValue().toString());
-        viewModel.getProduct().getValue().setOpening(open);
-        viewModel.getProduct().getValue().setBalance(balance);
-//        viewModel.getProductList().
-//        viewModel.getProductList().getValue().set(viewModel.getProduct().getValue().id-1,viewModel.getProduct().getValue());
-        viewModel.updateProductList(viewModel.getProduct().getValue());
-        Log.i("FragmentAlertDialog", viewModel.getProduct().getValue().toString());
-
-
-//        NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-//        ItemFragment itemFragment = (ItemFragment)navHostFragment.getChildFragmentManager().getFragments().get(0);
-//        itemFragment.refreshView();
-
+    @Override
+    public void onFragmentInteraction() {
 
     }
-
 }

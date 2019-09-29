@@ -1,4 +1,4 @@
-package com.kopicat.myapplication;
+package com.kopicat.myapplication.ui.edit;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kopicat.myapplication.ItemFragment.OnListFragmentInteractionListener;
+import com.kopicat.myapplication.R;
+import com.kopicat.myapplication.ui.edit.EditItemsFragment.OnListFragmentInteractionListener;
 import com.kopicat.myapplication.entity.Product;
 
 import java.util.List;

@@ -1,13 +1,18 @@
 <resources>
     <string name="app_name">MyAccountBook</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="edit_hint">Please enter some amount</string>
+    <string name="title_edit">Edit</string>
+    <string name="title_result">Table</string>
     <string name="label_opening">出货</string>
     <string name="label_balance">每天存</string>
+    <string name="label_total">实际卖出</string>
+    <string name="label_name">名字</string>
+    <string name="label_id">号</string>
     <string name="error_msg_is_empty">Please key in amount</string>
     <string name="error_msg_not_valid">Please key in valid amount</string>
     <string name="save_button">SAVE</string>
     <string name="cancel_button">CANCEL</string>
+    <string name="send_button">SEND</string>
+    <string name="label_branch">Branch Name</string>
+
 </resources>

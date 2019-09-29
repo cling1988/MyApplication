@@ -1,4 +1,4 @@
-package com.kopicat.myapplication;
+package com.kopicat.myapplication.ui.edit;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,12 +9,13 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.kopicat.myapplication.entity.ProductViewModel;
+import com.kopicat.myapplication.R;
 import com.kopicat.myapplication.entity.Product;
 
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ItemFragment extends Fragment {
+public class EditItemsFragment extends Fragment {
 
 
     private OnListFragmentInteractionListener mListener;
@@ -40,7 +41,7 @@ public class ItemFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ItemFragment() {
+    public EditItemsFragment() {
     }
 
 
@@ -53,32 +54,22 @@ public class ItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_items, container, false);
 
         Context context = view.getContext();
         recyclerView = (RecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         adapter = new MyItemRecyclerViewAdapter(viewModel.getProductList().getValue(), mListener);
-
-
         recyclerView.setAdapter(adapter);
         Observer<List<Product>> productListObserver = new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
-//                adapter = new MyItemRecyclerViewAdapter(products, mListener);
-//
-//
-//                recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                Log.i("Inside Fragment","Reload the list "+adapter.hasObservers());
-
-                Toast.makeText(getContext(),"Update the list",Toast.LENGTH_LONG);
+//                Toast.makeText(getContext(), "Update the list", Toast.LENGTH_LONG).show();
             }
         };
-        viewModel.getProductList().observe(this,productListObserver);
+        viewModel.getProductList().observe(getViewLifecycleOwner(), productListObserver);
 
-//        adapter = new MyItemRecyclerViewAdapter(viewModel.getProductList2(), mListener);
-//        recyclerView.setAdapter(adapter);
         return view;
     }
 
@@ -119,8 +110,4 @@ public class ItemFragment extends Fragment {
         this.mListener = callback;
     }
 
-    public void refreshView() {
-        adapter.notifyDataSetChanged();
-        Log.i("Refresh", "123");
-    }
 }

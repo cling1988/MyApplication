@@ -14,16 +14,8 @@ public class Product implements Comparable<Product> {
         this.balance = balance;
     }
 
-    public void setOpening(Double value) {
-        this.opening = value;
-    }
-
-    public void setBalance(Double value) {
-        this.balance = value;
-    }
-
     public Double getTotal() {
-        return opening + balance;
+        return opening - balance;
     }
 
     @Override
